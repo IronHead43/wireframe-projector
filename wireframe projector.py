@@ -54,10 +54,14 @@ def transformObject(x,y,z,theta,transformType):
     
     #if dilate then scale object back to unit object, then dilate it by scale factor given
     if transformType=="dilate":
-        vertices = vertices / scale
+
         scaleFactor=x
-        scale+=scaleFactor
-        vertices = vertices * scale
+         
+        #make sure scale is not <2 otherwise will delete object
+        if not (x<0 and scale<2):
+            vertices = vertices / scale
+            scale+=scaleFactor
+            vertices = vertices * scale
         
     
 
@@ -116,15 +120,15 @@ def generateEdges():
 #draw each edge
 
 def drawObject(edges):
-    cube.clear()  # Clear the previous drawing
+    object.clear()  # Clear the previous drawing
 
     for edge in edges:
         x1, y1 = edge[0][:2]
         x2, y2 = edge[1][:2]
-        cube.penup()
-        cube.goto(x1, y1)
-        cube.pendown()
-        cube.goto(x2, y2)
+        object.penup()
+        object.goto(x1, y1)
+        object.pendown()
+        object.goto(x2, y2)
 
     screen.update()  # Update the screen with the new drawing
 
@@ -179,11 +183,12 @@ print("it can be controlled by using WASD to rotate around centre, arrow keys to
 screen = turtle.Screen()
 screen.bgcolor("black")
 
-# Create a turtle
-cube = turtle.Turtle()
-cube.speed(0) 
+# Create a turtle to draw the object
+
+object = turtle.Turtle()
+object.speed(0) 
 screen.tracer(0)
-cube.hideturtle()
+object.hideturtle()
 
 #create corresponding object
 
@@ -192,11 +197,12 @@ createObject()
 #scale object 
 vertices = vertices * scale
 
-cube.color("white")   # Set the color of the trail to blue
-cube.pensize(3)      # Set the thickness of the trail
+object.color("white")   # Set the color of the trail to blue
+object.pensize(3)      # Set the thickness of the trail
 
 
 generateEdges() # generate edges and draw object
+
 
 
 
